@@ -1,10 +1,10 @@
 <script>
+	export let fetchSimilarCards;
 	/** @type {string[]} */
 	let autocompleteSuggestions = [];
 	let query = '';
 
 	async function fetchAutocompleteSuggestions(event) {
-		console.log(arguments)
 		if (!query || query.length < 2) {
 			autocompleteSuggestions = [];
 			return;
@@ -18,7 +18,6 @@
 			const response = await fetch(`http://localhost:8000/autocomplete/cards?q=${query}`);
 			/** @type string[] */
 			const data = await response.json();
-			console.log(data);
 			autocompleteSuggestions = data || [];
 		} catch (error) {
 			console.error(error);
@@ -34,6 +33,12 @@
 			timeout = setTimeout(callback, delay, ...args);
 		};
 	}
+
+	async function handleAutocompleteElementClick(card_id, card_name) {
+		query = card_name;
+		autocompleteSuggestions = [];
+		await fetchSimilarCards(card_id);
+	}
 </script>
 
 <div class="flex flex-col w-full">
@@ -47,12 +52,12 @@
 		on:keyup={debounce(fetchAutocompleteSuggestions, 300)}
 		
 	/>
-	{#if autocompleteSuggestions.length > 0}
+	{#if Object.values(autocompleteSuggestions).length > 0}
 		<div class="z-0 -mt-4 border-x border-b border-gray-300 pt-4 flex flex-col">
-			{#each autocompleteSuggestions as suggestion}
+			{#each Object.entries(autocompleteSuggestions) as [id, suggestion]}
 				<button
 					class="cursor-pointer rounded-md p-2 hover:bg-blue-50"
-					on:click={() => (query = suggestion)}><p class="ml-2">{suggestion}</p></button
+					on:click={() => handleAutocompleteElementClick(id, suggestion)}><p class="ml-2">{suggestion}</p></button
 				>
 			{/each}
 		</div>
