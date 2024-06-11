@@ -5,8 +5,9 @@
 
 	async function fetchSimilarCards (card_id) {
 		try {
-			const response = await fetch(`http://localhost:8000/cards/${card_id}`);
+			const response = await fetch(`http://localhost:8000/cards/similar/${card_id}`);
 			similarCards = await response.json();
+			
 		} catch (error) {
 			console.error(error);
 		}
@@ -20,9 +21,11 @@
 	<div class="w-96 flex">
 		<Search fetchSimilarCards ={fetchSimilarCards } />
 	</div>
-	{#each similarCards as card}
-		<div>{JSON.stringify(card)}</div>
-	{/each}
+	<div class="grid grid-cols-4 gap-4">
+		{#each similarCards as card}
+			<div><img src={`https://cards.scryfall.io/small/front/${card.scryfallId[0]}/${card.scryfallId[1]}/${card.scryfallId}.jpg`} alt={`card-${card.uuid}`}/></div>
+		{/each}
+	</div>
 </div>
 
 <p>
