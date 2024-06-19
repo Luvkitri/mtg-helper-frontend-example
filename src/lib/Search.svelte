@@ -41,19 +41,19 @@
 	}
 </script>
 
-<div class="flex flex-col w-full">
+<div class="relative flex flex-col w-full">
 	<input
 		name="search"
 		type="text"
 		autocomplete="off"
 		placeholder="Search..."
-		class="z-10 rounded-lg border border-gray-300 p-4 hover:border-blue-500 focus:border-blue-500 focus:outline-none"
+		class="z-20 rounded-lg border border-gray-300 p-4 hover:border-blue-500 focus:border-blue-500 focus:outline-none"
 		bind:value={query}
 		on:keyup={debounce(fetchAutocompleteSuggestions, 300)}
 		
 	/>
 	{#if Object.values(autocompleteSuggestions).length > 0}
-		<div class="z-0 -mt-4 border-x border-b border-gray-300 pt-4 flex flex-col">
+		<div class="absolute z-10 mt-11 border-x border-b border-gray-300 pt-4 flex flex-col bg-white w-full">
 			{#each Object.entries(autocompleteSuggestions) as [id, suggestion]}
 				<button
 					class="cursor-pointer rounded-md p-2 hover:bg-blue-50"
