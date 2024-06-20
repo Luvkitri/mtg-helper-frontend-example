@@ -1,5 +1,5 @@
 <script>
-	export let fetchSimilarCards;
+	export let setSelectedCardId;
 	/** @type {string[]} */
 	let autocompleteSuggestions = [];
 	let query = '';
@@ -34,10 +34,10 @@
 		};
 	}
 
-	async function handleAutocompleteElementClick(card_id, card_name) {
+	function handleAutocompleteElementClick(card_id, card_name) {
 		query = card_name;
 		autocompleteSuggestions = [];
-		await fetchSimilarCards(card_id);
+		setSelectedCardId(card_id);
 	}
 </script>
 
