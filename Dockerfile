@@ -1,3 +1,6 @@
+ARG api_url
+ENV PUBLIC_API_URL=$api_url
+
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json .
