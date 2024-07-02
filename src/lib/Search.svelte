@@ -1,5 +1,5 @@
 <script>
-	import { PUBLIC_API_URL } from "$env/static/public";
+	import { env } from "$env/dynamic/public";
 	export let setSelectedCardId;
 	/** @type {string[]} */
 	let autocompleteSuggestions = [];
@@ -16,7 +16,7 @@
 		}
 
 		try {
-			const response = await fetch(`${PUBLIC_API_URL}/autocomplete/cards?q=${query}`);
+			const response = await fetch(`${env.PUBLIC_API_URL}/autocomplete/cards?q=${query}`);
 			/** @type string[] */
 			const data = await response.json();
 			autocompleteSuggestions = data || [];

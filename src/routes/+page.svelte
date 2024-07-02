@@ -1,9 +1,9 @@
 <script>
-	import { PUBLIC_API_URL } from "$env/static/public";
+	import { env } from "$env/dynamic/public";
 	import Search from '$lib/Search.svelte';
 	import Pagination from '$lib/Pagination.svelte';
 
-	console.log(`API URL: ${PUBLIC_API_URL}`);
+	console.log(`API URL: ${env.PUBLIC_API_URL}`);
 	
 	let selectedCardId;
 	let similarCards = [];
@@ -23,7 +23,7 @@
 	
 	async function fetchSimilarCards() {
 		try {
-			const response = await fetch(`${PUBLIC_API_URL}/cards/similar/${selectedCardId}?limit=${limit}&offset=${offset}`);
+			const response = await fetch(`${env.PUBLIC_API_URL}/cards/similar/${selectedCardId}?limit=${limit}&offset=${offset}`);
 			const responseData = await response.json();
 			similarCards = responseData.data;
 			limit = responseData.limit;
