@@ -1,10 +1,8 @@
 <script>
-	import { env } from "$env/dynamic/public";
+	import { env } from '$env/dynamic/public';
 	import Search from '$lib/Search.svelte';
 	import Pagination from '$lib/Pagination.svelte';
 
-	console.log(`API URL: ${env.PUBLIC_API_URL}`);
-	
 	let selectedCardId;
 	let similarCards = [];
 	let total = 0;
@@ -15,22 +13,24 @@
 
 	function setSelectedCardId(card_id) {
 		selectedCardId = card_id;
- 	}
+	}
 
- 	$: if (selectedCardId) {
- 		fetchSimilarCards();
- 	}
-	
+	$: if (selectedCardId) {
+		fetchSimilarCards();
+	}
+
 	async function fetchSimilarCards() {
 		try {
-			const response = await fetch(`${env.PUBLIC_API_URL}/cards/similar/${selectedCardId}?limit=${limit}&offset=${offset}`);
+			const response = await fetch(
+				`${env.PUBLIC_API_URL}/cards/similar/${selectedCardId}?limit=${limit}&offset=${offset}`
+			);
 			const responseData = await response.json();
 			similarCards = responseData.data;
 			limit = responseData.limit;
 			offset = responseData.offset;
-			total = responseData.total
+			total = responseData.total;
 
-			pageCount = Math.ceil(total / limit); 
+			pageCount = Math.ceil(total / limit);
 		} catch (error) {
 			console.error(error);
 		}
@@ -41,28 +41,33 @@
 			if (nextPage > pageCount || nextPage < 0) {
 				return;
 			}
-			
+
 			page = nextPage;
 			offset = (page - 1) * limit;
 			await fetchSimilarCards();
-		} catch (error) {			
+		} catch (error) {
 			console.error(error);
 		}
-	} 
+	}
 </script>
 
-
-<div class="flex flex-col items-center w-full">
+<div class="flex w-full flex-col items-center">
 	<h1 class="text-3xl font-bold">MTG Helper</h1>
-	<div class="w-96 flex p-4">
-		<Search setSelectedCardId={setSelectedCardId} />
+	<div class="flex w-96 p-4">
+		<Search {setSelectedCardId} />
 	</div>
 	<div class="grid grid-cols-5 gap-4">
 		{#each similarCards as card}
-			<div><img width="250" src={`https://cards.scryfall.io/normal/front/${card.scryfallId[0]}/${card.scryfallId[1]}/${card.scryfallId}.jpg`} alt={`card-${card.uuid}`}/></div>
+			<div>
+				<img
+					width="250"
+					src={`https://cards.scryfall.io/normal/front/${card.scryfallId[0]}/${card.scryfallId[1]}/${card.scryfallId}.jpg`}
+					alt={`card-${card.uuid}`}
+				/>
+			</div>
 		{/each}
 	</div>
-	<Pagination page={page} pageCount={pageCount} setPage={setPage} />
+	<Pagination {page} {pageCount} {setPage} />
 </div>
 
 <p>
