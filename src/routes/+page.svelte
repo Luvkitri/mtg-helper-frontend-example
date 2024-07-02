@@ -3,6 +3,8 @@
 	import Search from '$lib/Search.svelte';
 	import Pagination from '$lib/Pagination.svelte';
 
+	console.log(`API URL: ${PUBLIC_API_URL}`);
+	
 	let selectedCardId;
 	let similarCards = [];
 	let total = 0;
