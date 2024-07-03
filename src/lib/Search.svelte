@@ -1,5 +1,5 @@
 <script>
-	import { env } from "$env/dynamic/public";
+	import { env } from '$env/dynamic/public';
 	export let setSelectedCardId;
 	/** @type {string[]} */
 	let autocompleteSuggestions = [];
@@ -42,23 +42,25 @@
 	}
 </script>
 
-<div class="relative flex flex-col w-full">
+<div class="relative flex w-full flex-col">
 	<input
 		name="search"
 		type="text"
 		autocomplete="off"
 		placeholder="Search..."
-		class="z-20 rounded-lg border border-gray-300 p-4 hover:border-blue-500 focus:border-blue-500 focus:outline-none"
+		class="z-20 rounded-lg border border-gray-300 p-4 hover:border-sky-700 focus:border-sky-700 focus:outline-none"
 		bind:value={query}
 		on:keyup={debounce(fetchAutocompleteSuggestions, 300)}
-		
 	/>
 	{#if Object.values(autocompleteSuggestions).length > 0}
-		<div class="absolute z-10 mt-11 border-x border-b border-gray-300 pt-4 flex flex-col bg-white w-full">
+		<div
+			class="absolute z-10 mt-11 flex w-full flex-col border-x border-b border-gray-300 bg-white pt-4"
+		>
 			{#each Object.entries(autocompleteSuggestions) as [id, suggestion]}
 				<button
 					class="cursor-pointer rounded-md p-2 hover:bg-blue-50"
-					on:click={() => handleAutocompleteElementClick(id, suggestion)}><p class="ml-2">{suggestion}</p></button
+					on:click={() => handleAutocompleteElementClick(id, suggestion)}
+					><p class="ml-2">{suggestion}</p></button
 				>
 			{/each}
 		</div>

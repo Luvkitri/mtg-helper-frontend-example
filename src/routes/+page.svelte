@@ -2,6 +2,7 @@
 	import { env } from '$env/dynamic/public';
 	import Search from '$lib/Search.svelte';
 	import Pagination from '$lib/Pagination.svelte';
+	import Dropdown from '$lib/Dropdown.svelte';
 
 	let selectedCardId;
 	let similarCards = [];
@@ -53,8 +54,9 @@
 
 <div class="flex w-full flex-col items-center">
 	<h1 class="text-3xl font-bold">MTG Helper</h1>
-	<div class="flex w-96 p-4">
+	<div class="flex w-[44rem] flex-col gap-4 p-4">
 		<Search {setSelectedCardId} />
+		<Dropdown text={'Advanced filters'} />
 	</div>
 	<div class="grid grid-cols-5 gap-4">
 		{#each similarCards as card}
@@ -69,4 +71,3 @@
 	</div>
 	<Pagination {page} {pageCount} {setPage} />
 </div>
-
