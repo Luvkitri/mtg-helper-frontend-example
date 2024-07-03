@@ -70,7 +70,3 @@
 	<Pagination {page} {pageCount} {setPage} />
 </div>
 
-<p>
-	You can visit mtg-helper github <a href="https://github.com/Luvkitri/mtg-helper">page</a> for more
-	info!
-</p>
