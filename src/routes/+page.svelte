@@ -2,18 +2,35 @@
 	import { env } from '$env/dynamic/public';
 	import Search from '$lib/Search.svelte';
 	import Pagination from '$lib/Pagination.svelte';
-	import Dropdown from '$lib/Dropdown.svelte';
+	import Filter from '$lib/Filter.svelte';
 
+	/** @type string | undefined*/
 	let selectedCardId;
-	let similarCards = [];
-	let total = 0;
-	let page = 1;
-	let pageCount = 0;
-	let limit = 10;
-	let offset = 0;
 
-	function setSelectedCardId(card_id) {
-		selectedCardId = card_id;
+	/** @type {import('$lib/types').Card[]}*/
+	let similarCards = [];
+
+	/** @type {import('$lib/types').PaginationData}*/
+	let paginationData = {
+		total: 0,
+		page: 1,
+		pageCount: 0,
+		limit: 10,
+		offset: 0
+	};
+
+	/** @type {import('$lib/types').FilterData}*/
+	let filterData = {
+		filterColor: false,
+		filterType: false
+	};
+
+	/**
+	 * @param {string} cardId
+	 * @returns void
+	 */
+	function setSelectedCardId(cardId) {
+		selectedCardId = cardId;
 	}
 
 	$: if (selectedCardId) {
@@ -23,28 +40,34 @@
 	async function fetchSimilarCards() {
 		try {
 			const response = await fetch(
-				`${env.PUBLIC_API_URL}/cards/similar/${selectedCardId}?limit=${limit}&offset=${offset}`
+				`${env.PUBLIC_API_URL}/cards/similar/${selectedCardId}` +
+					`?limit=${paginationData.limit}` +
+					`&offset=${paginationData.offset}` +
+					`&filter_color=${filterData.filterColor}` +
+					`&filter_type=${filterData.filterType}`
 			);
 			const responseData = await response.json();
 			similarCards = responseData.data;
-			limit = responseData.limit;
-			offset = responseData.offset;
-			total = responseData.total;
-
-			pageCount = Math.ceil(total / limit);
+			paginationData.limit = responseData.limit;
+			paginationData.offset = responseData.offset;
+			paginationData.total = responseData.total;
+			paginationData.pageCount = Math.ceil(paginationData.total / paginationData.limit);
 		} catch (error) {
 			console.error(error);
 		}
 	}
-
+	/**
+	 * @param {number} nextPage
+	 * @returns Promise<void>}
+	 */
 	async function setPage(nextPage) {
 		try {
-			if (nextPage > pageCount || nextPage < 0) {
+			if (nextPage > paginationData.pageCount || nextPage < 0) {
 				return;
 			}
 
-			page = nextPage;
-			offset = (page - 1) * limit;
+			paginationData.page = nextPage;
+			paginationData.offset = (paginationData.page - 1) * paginationData.limit;
 			await fetchSimilarCards();
 		} catch (error) {
 			console.error(error);
@@ -56,9 +79,9 @@
 	<h1 class="text-3xl font-bold">MTG Helper</h1>
 	<div class="flex w-[44rem] flex-col gap-4 p-4">
 		<Search {setSelectedCardId} />
-		<Dropdown text={'Advanced filters'} />
+		<Filter {filterData} />
 	</div>
-	<div class="grid grid-cols-5 gap-4">
+	<div class="grid grid-cols-5 gap-4 py-2">
 		{#each similarCards as card}
 			<div>
 				<img
@@ -69,5 +92,5 @@
 			</div>
 		{/each}
 	</div>
-	<Pagination {page} {pageCount} {setPage} />
+	<Pagination {paginationData} {setPage} />
 </div>

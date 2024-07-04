@@ -1,17 +1,28 @@
 <script>
 	import { env } from '$env/dynamic/public';
+	/**
+	 * @type {Function}
+	 */
 	export let setSelectedCardId;
+
 	/** @type {string[]} */
 	let autocompleteSuggestions = [];
 	let query = '';
 
+	/**
+	 * @param {Event} event
+	 * @returns Promise<void>
+	 */
 	async function fetchAutocompleteSuggestions(event) {
 		if (!query || query.length < 2) {
 			autocompleteSuggestions = [];
 			return;
 		}
 
-		if (event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40) {
+		if (
+			'keyCode' in event &&
+			(event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40)
+		) {
 			event.preventDefault();
 		}
 
@@ -25,20 +36,30 @@
 		}
 	}
 
-	function debounce(callback, delay, event) {
+	/**
+	 * @param {any} callback
+	 * @param {number} delay
+	 * @returns void
+	 */
+	function debounce(callback, delay) {
 		/** @type number | undefined */
 		let timeout = undefined;
 
-		return (...args) => {
+		return (/** @type {any} */ ...args) => {
 			clearTimeout(timeout);
 			timeout = setTimeout(callback, delay, ...args);
 		};
 	}
 
-	function handleAutocompleteElementClick(card_id, card_name) {
-		query = card_name;
+	/**
+	 * @param {string} cardId
+	 * @param {string} cardName
+	 * @returns void
+	 */
+	function handleAutocompleteElementClick(cardId, cardName) {
+		query = cardName;
 		autocompleteSuggestions = [];
-		setSelectedCardId(card_id);
+		setSelectedCardId(cardId);
 	}
 </script>
 

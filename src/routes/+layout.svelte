@@ -2,9 +2,12 @@
 	import '../app.css';
 </script>
 
-<div class="flex flex-col p-12 h-full relative">
-	<slot />
-	<div class="flex flex-col gap-4 items-center m-4">
+<div class="relative box-border flex min-h-full flex-col">
+	<header class="m-4 shrink-0 grow-0"></header>
+	<main class="m-4 grow">
+		<slot />
+	</main>
+	<footer class="m-4 flex shrink-0 grow-0 flex-col items-center gap-4">
 		<div>
 			<p>
 				You can visit mtg-helper github <a href="https://github.com/Luvkitri/mtg-helper">page</a> for
@@ -21,5 +24,5 @@
 				<p style="margin-left: 10px">Powered by MTGJSON</p>
 			</a>
 		</div>
-	</div>
+	</footer>
 </div>
