@@ -41,7 +41,7 @@
 		selectedCardId = cardId;
 	};
 
-	$: if (selectedCardId) {
+	$: if (selectedCardId && filterData) {
 		fetchSimilarCards();
 	}
 

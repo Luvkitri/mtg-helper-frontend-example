@@ -83,8 +83,6 @@
 			return false;
 		}
 	}
-
-	$: console.log(autocompleteSuggestions, isAutocompleteSuggestionOpen);
 </script>
 
 <div class="relative flex w-full flex-col" use:clickOutside on:click_outside={handleClickOutside}>
@@ -100,7 +98,6 @@
 		on:keydown={handleInputKeyDown}
 	/>
 	{#if isAutocompleteSuggestionOpen && Object.values(autocompleteSuggestions).length > 0}
-		<p>WHY NOT?</p>
 		<div
 			class="absolute z-10 mt-11 flex w-full flex-col border-x border-b border-gray-300 bg-white pt-4"
 		>
