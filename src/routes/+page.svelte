@@ -10,7 +10,7 @@
 	/** @type {import('$lib/types').Card[]}*/
 	let similarCards = [];
 
-	/** @type {import('$lib/types').PaginationData}*/
+	/** @type {import('$lib/types').PaginationData} */
 	let paginationData = {
 		total: 0,
 		page: 1,
@@ -19,25 +19,33 @@
 		offset: 0
 	};
 
-	/** @type {import('$lib/types').FilterData}*/
+	/** @type {import('$lib/types').FilterData} */
 	let filterData = {
 		filterColor: false,
 		filterType: false
 	};
 
 	/**
+	 * @param {import('$lib/types').FilterData} newFilterData
+	 * @returns void
+	 */
+	const setFilterData = (newFilterData) => {
+		filterData = newFilterData;
+	};
+
+	/**
 	 * @param {string} cardId
 	 * @returns void
 	 */
-	function setSelectedCardId(cardId) {
+	const setSelectedCardId = (cardId) => {
 		selectedCardId = cardId;
-	}
+	};
 
 	$: if (selectedCardId) {
 		fetchSimilarCards();
 	}
 
-	async function fetchSimilarCards() {
+	const fetchSimilarCards = async () => {
 		try {
 			const response = await fetch(
 				`${env.PUBLIC_API_URL}/cards/similar/${selectedCardId}` +
@@ -55,12 +63,13 @@
 		} catch (error) {
 			console.error(error);
 		}
-	}
+	};
+
 	/**
 	 * @param {number} nextPage
 	 * @returns Promise<void>}
 	 */
-	async function setPage(nextPage) {
+	const setPage = async (nextPage) => {
 		try {
 			if (nextPage > paginationData.pageCount || nextPage < 0) {
 				return;
@@ -72,14 +81,14 @@
 		} catch (error) {
 			console.error(error);
 		}
-	}
+	};
 </script>
 
 <div class="flex w-full flex-col items-center">
 	<h1 class="text-3xl font-bold">MTG Helper</h1>
 	<div class="flex w-[44rem] flex-col gap-4 p-4">
 		<Search {setSelectedCardId} />
-		<Filter {filterData} />
+		<Filter {setFilterData} />
 	</div>
 	<div class="grid grid-cols-5 gap-4 py-2">
 		{#each similarCards as card}
